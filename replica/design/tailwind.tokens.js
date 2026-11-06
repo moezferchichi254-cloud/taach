@@ -21,7 +21,9 @@ module.exports = {
     "success": "rgb(var(--color-success) / <alpha-value>)",
     "success-bg": "rgb(var(--color-success-bg) / <alpha-value>)",
     "warning": "rgb(var(--color-warning) / <alpha-value>)",
-    "warning-bg": "rgb(var(--color-warning-bg) / <alpha-value>)"
+    "warning-bg": "rgb(var(--color-warning-bg) / <alpha-value>)",
+    "photo-chip": "rgb(var(--color-photo-chip) / <alpha-value>)",
+    "on-photo-chip": "rgb(var(--color-on-photo-chip) / <alpha-value>)"
   },
   "fontFamily": {
     "sans": [

@@ -1,22 +1,22 @@
 feature,area,priority,original,clone,notes
 Sign up with email / Apple / Google,onboarding,must,yes,no,Apple sign-in required on iOS if any social login is offered
 Pick interests (sizes / categories) at onboarding,onboarding,could,guess,no,not confirmed in sources; would personalise the niche feed
-Tab bar: Home / Search / Sell / Inbox / Profile,navigation,must,yes,no,standard marketplace shell
-Personalised home feed of new listings,browse,must,yes,no,
-Browse by category tree,browse,must,yes,no,niche = shallower tree
+Tab bar: Home / Search / Sell / Inbox / Profile,navigation,must,yes,yes,S02 shell
+Personalised home feed of new listings,browse,must,yes,partial,newest-first feed + category chips; no personalisation
+Browse by category tree,browse,must,yes,partial,top-level category chips only
 Keyword search,search,must,yes,no,
 Filters: category size brand condition colour price,search,must,yes,no,
 Sort (relevance / newest / price),search,should,yes,no,
 Saved searches with new-listing alerts,search,should,yes,no,
-Item page: photo gallery title price+fee description attributes,item,must,yes,no,show item price and price incl. buyer fee
-Item page: seller card with rating and reviews count,item,must,yes,no,
+Item page: photo gallery title price+fee description attributes,item,must,yes,yes,S06
+Item page: seller card with rating and reviews count,item,must,yes,yes,S06; profile page is a stub
 Favourite an item (heart) + favourites list,item,must,yes,no,
 Seller gets notified when an item is favourited,notifications,could,guess,no,
 Similar items on item page,item,should,yes,no,
-List an item: up to 20 photos ordered,sell,must,yes,no,
-List an item: title description category brand size condition colour up to 3 materials,sell,must,yes,no,
+List an item: up to 20 photos ordered,sell,must,yes,partial,pick + remove + cover; no drag reorder yet
+List an item: title description category brand size condition colour up to 3 materials,sell,must,yes,partial,colour and materials not yet
 List an item: price with similar-sold price hint,sell,should,yes,no,needs your own sold-price data; empty at launch
-List an item: parcel size,sell,must,yes,no,drives shipping price
+List an item: parcel size,sell,must,yes,yes,S11
 Edit / hide / delete / mark sold a listing,sell,must,yes,no,
 Seller wardrobe (profile listings grid),profile,must,yes,no,
 Follow a member,profile,could,yes,no,
@@ -26,23 +26,23 @@ Seller accept / decline / counter offer,offers,must,yes,no,offer not binding unt
 Bundle: buy several items from one seller in one order,bundles,should,yes,no,
 Seller-set bundle discount tiers,bundles,should,yes,no,
 Checkout: address + delivery method + payment,checkout,must,yes,no,
-Courier home delivery; courier collects from the seller,shipping,must,yes,no,Tunisia: no pickup-point network like Mondial Relay; courier adapter (Aramex has an API; check local couriers)
-Fee breakdown: item + buyer protection fee + shipping,checkout,must,yes,no,original fee ~3-8% + fixed; set your own
-Cash on delivery (courier collects the total),payments,must,yes,no,Tunisia: >80% of online orders are COD; Stripe is not available for Tunisian businesses
-Hold seller money until the order completes,payments,must,yes,no,ledger: pending until completed AND courier COD cash remitted; check BCT rules with a lawyer
-Courier pickup booked + label/tracking number for the seller,shipping,must,yes,no,via courier API; manual mode for couriers without one
+Courier home delivery; courier collects from the seller,shipping,must,yes,partial,manual courier adapter; no real courier API yet (fake data layer)
+Fee breakdown: item + buyer protection fee + shipping,checkout,must,yes,yes,"S18, S22; placeholder fee and shipping rates"
+Cash on delivery (courier collects the total),payments,must,yes,partial,COD order flow works on the fake data layer; no courier cash remittance
+Hold seller money until the order completes,payments,must,yes,partial,ledger entry pending until completion (fake data layer)
+Courier pickup booked + label/tracking number for the seller,shipping,must,yes,partial,seller marks handed over; tracking number is fake
 Shipping deadline for seller + auto-cancel if not shipped,orders,must,yes,no,
 Parcel tracking in the app,shipping,must,yes,no,carrier webhooks
-Buyer 2-day window after delivery: confirm or report problem,orders,must,yes,no,auto-completes after window
+Buyer 2-day window after delivery: confirm or report problem,orders,must,yes,partial,confirm works; auto-complete job and claim screen not yet
 Claims: not received / damaged / not as described with evidence photos,disputes,must,yes,no,needs a manual admin review tool
 Refund and return flow on accepted claims,disputes,must,yes,no,
 Leave feedback (stars + text) both ways,reviews,must,yes,no,
 Automatic feedback when nobody leaves one,reviews,should,yes,no,positive if buyer silent; negative if seller never shipped
 Edit / delete feedback you left,reviews,could,yes,no,
-Balance: pending vs available,wallet,must,yes,no,
+Balance: pending vs available,wallet,must,yes,partial,shown on profile; S26 wallet screen is a stub
 Withdraw to bank (RIB) / D17 / Flouci wallet,wallet,must,yes,no,v1: payout requests paid by admin bank transfer
 Identity check (CIN) before first payout,wallet,must,yes,no,v1: photo of CIN reviewed by admin
-Orders list (bought / sold) with statuses,orders,must,yes,no,
+Orders list (bought / sold) with statuses,orders,must,yes,yes,S21
 Push + in-app notifications,notifications,must,yes,no,messages offers order updates
 Report a listing or member,safety,must,yes,no,needed for store review and DSA
 Block a member,safety,should,yes,no,
@@ -58,13 +58,13 @@ Existing catalogue and member base,network,could,yes,skip,their users and listin
 Negotiated carrier shipping rates,shipping,could,yes,skip,partner deals; you negotiate your own
 Electronics authenticity / item verification service,trust,could,yes,skip,operational service with partners; out of slice
 Community forum,community,could,yes,skip,out of slice
-Sign up with phone number + SMS code,onboarding,must,guess,no,phone-first fits Tunisia; SMS via a local or global provider
-French and English interface (Arabic later; layout ready for right-to-left),onboarding,must,yes,no,
-Prices in TND (millimes),checkout,must,no,no,money stored as integer millimes
-Vintage flag + era / decade on listings,sell,must,no,no,fits the niche; category-specific attributes
+Sign up with phone number + SMS code,onboarding,must,guess,partial,demo: any 4-digit code; real SMS in /replica-backend
+French and English interface (Arabic later; layout ready for right-to-left),onboarding,must,yes,partial,FR + EN on built screens; stub titles FR only; RTL not tested yet
+Prices in TND (millimes),checkout,must,no,yes,integer millimes everywhere
+Vintage flag + era / decade on listings,sell,must,no,yes,"S11 toggle + era, badge on cards and S06"
 Categories beyond clothes (decor / books / vinyl / objects),browse,should,yes,no,second-hand and vintage articles in general
 Online payment via Konnect or Flouci (card / e-DINAR / wallet),payments,should,no,no,BCT-authorised Tunisian gateways; amounts in millimes
-Hand delivery: meet in person and confirm in app,shipping,should,no,no,common locally; no buyer protection unless confirmed in app
+Hand delivery: meet in person and confirm in app,shipping,should,no,partial,selectable at checkout; no in-person confirmation code yet
 COD remittance reconciliation for admins,admin,must,no,no,match courier cash transfers to orders before releasing seller money
 Buyer refuses parcel at the door: return to seller,orders,must,no,no,COD-specific state
 Pickup-point delivery,shipping,could,yes,no,only if a Tunisian courier offers relay points

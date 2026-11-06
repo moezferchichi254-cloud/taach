@@ -83,6 +83,11 @@ def main():
         "export const tokens = %s as const;\n\n"
         "export type ColorRole = keyof typeof tokens.color.light;\n" % json.dumps(ts, indent=2))
 
+    app_theme = os.path.join(HERE, "..", "..", "mobile", "src", "theme")
+    if os.path.isdir(app_theme):
+        import shutil
+        shutil.copy(os.path.join(a.out, "tokens.ts"), os.path.join(app_theme, "tokens.ts"))
+        print("copied tokens.ts into mobile/src/theme")
     print("wrote global.css, tokens.css, tailwind.tokens.js, tokens.ts to %s" % a.out)
 
 

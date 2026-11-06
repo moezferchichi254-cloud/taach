@@ -21,7 +21,9 @@ export const tokens = {
       "success": "#157f3d",
       "success-bg": "#e8f5ec",
       "warning": "#975a06",
-      "warning-bg": "#fdf3e2"
+      "warning-bg": "#fdf3e2",
+      "photo-chip": "#ffffff",
+      "on-photo-chip": "#0f0f0f"
     },
     "dark": {
       "bg": "#0b0b0b",
@@ -43,7 +45,9 @@ export const tokens = {
       "success": "#4ade80",
       "success-bg": "#0f2417",
       "warning": "#fbbf24",
-      "warning-bg": "#2a2008"
+      "warning-bg": "#2a2008",
+      "photo-chip": "#ffffff",
+      "on-photo-chip": "#0f0f0f"
     }
   },
   "type": {
