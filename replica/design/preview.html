@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Taach design preview</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* Visual check of tokens only: not app code. */
+  :root{--c:rgb(var(--color-text));}
+  *{box-sizing:border-box;margin:0}
+  body{background:rgb(var(--color-bg));color:rgb(var(--color-text));font:400 16px/22px Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:16px 16px 0;max-width:390px}
+  h1{font:700 28px/34px Fraunces,Georgia,serif;margin-bottom:4px}
+  h2{font:600 18px/24px inherit;margin:24px 0 12px}
+  .muted{color:rgb(var(--color-text-muted))}.xs{font-size:12px;line-height:16px;font-weight:500}.sm{font-size:14px;line-height:20px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .btn{height:44px;padding:0 20px;border-radius:999px;font-weight:600;border:0;font-size:16px;display:inline-flex;align-items:center;gap:8px}
+  .primary{background:rgb(var(--color-accent));color:rgb(var(--color-on-accent))}
+  .primary.pressed{background:rgb(var(--color-accent-pressed))}
+  .secondary{background:rgb(var(--color-bg));color:rgb(var(--color-text));border:1px solid rgb(var(--color-text))}
+  .ghost{background:none;color:rgb(var(--color-text))}
+  .danger{background:rgb(var(--color-danger));color:rgb(var(--color-on-danger))}
+  .disabled{opacity:.4}
+  .focus{outline:2px solid rgb(var(--color-focus));outline-offset:2px}
+  .full{width:100%;justify-content:center;height:52px}
+  .chip{height:36px;padding:0 14px;border-radius:999px;background:rgb(var(--color-surface-2));font-size:14px;font-weight:500;display:inline-flex;align-items:center}
+  .chip.on{background:rgb(var(--color-accent));color:rgb(var(--color-on-accent))}
+  .badge{height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:600;display:inline-flex;align-items:center}
+  .b-vintage{background:rgb(var(--color-vintage-bg));color:rgb(var(--color-vintage))}
+  .b-success{background:rgb(var(--color-success-bg));color:rgb(var(--color-success))}
+  .b-warning{background:rgb(var(--color-warning-bg));color:rgb(var(--color-warning))}
+  .b-danger{background:rgb(var(--color-danger-bg));color:rgb(var(--color-danger))}
+  .b-neutral{background:rgb(var(--color-surface-2))}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .photo{aspect-ratio:4/5;border-radius:10px;position:relative;overflow:hidden}
+  .heart{position:absolute;top:8px;inset-inline-end:8px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;display:grid;place-items:center;font-size:18px}
+  .onphoto{position:absolute;bottom:8px;inset-inline-start:8px;display:flex;gap:4px}
+  .price{font-weight:700;margin-top:8px;font-variant-numeric:tabular-nums}
+  .field label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+  .input{height:48px;border-radius:10px;border:1px solid rgb(var(--color-border-input));padding:0 12px;display:flex;align-items:center;background:rgb(var(--color-bg))}
+  .input.err{border:2px solid rgb(var(--color-danger))}.input.foc{border:2px solid rgb(var(--color-accent))}
+  .errtxt{color:rgb(var(--color-danger));font-size:12px;margin-top:4px}
+  .card{background:rgb(var(--color-surface));border-radius:16px;padding:16px}
+  .bubble{max-width:75%;padding:10px 14px;border-radius:16px;margin:4px 0}
+  .mine{background:rgb(var(--color-accent));color:rgb(var(--color-on-accent));margin-inline-start:auto}
+  .theirs{background:rgb(var(--color-surface))}
+  .offer{border:1px solid rgb(var(--color-border));border-radius:16px;padding:12px;background:rgb(var(--color-bg))}
+  .strike{text-decoration:line-through}
+  .line{display:flex;justify-content:space-between;padding:6px 0}
+  .total{border-top:1px solid rgb(var(--color-border));margin-top:6px;padding-top:10px;font-weight:700;font-size:18px}
+  .tabbar{margin:24px -16px 0;width:390px;height:64px;border-top:1px solid rgb(var(--color-border));background:rgb(var(--color-bg));display:flex;justify-content:space-around;align-items:center;font-size:11px}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:2px;color:rgb(var(--color-text-muted))}.tab.on{color:rgb(var(--color-text));font-weight:600}
+  .sell{width:44px;height:44px;border-radius:50%;background:rgb(var(--color-accent));color:rgb(var(--color-on-accent));display:grid;place-items:center;font-size:26px}
+  .dot{width:20px;height:20px;border-radius:6px;background:currentColor;opacity:.9}
+  .search{height:44px;border-radius:999px;background:rgb(var(--color-surface-2));display:flex;align-items:center;padding:0 16px;margin:12px 0}
+</style></head>
+<body>
+  <h1>Taach</h1>
+  <p class="muted sm">Seconde main &amp; vintage. Aperçu du système de design.</p>
+  <div class="search muted">⌕&nbsp; Rechercher un article, une marque…</div>
+  <div class="row"><span class="chip on">Tout</span><span class="chip">Vintage</span><span class="chip">Femme</span><span class="chip">Homme</span><span class="chip">Maison</span></div>
+
+  <h2>Articles</h2>
+  <div class="grid">
+    <div><div class="photo" style="background:linear-gradient(160deg,#7a5230,#3b2614)"><span class="heart">♡</span><div class="onphoto"><span class="badge b-vintage">Vintage</span></div></div>
+      <div class="price">35 DT</div><div class="sm muted">M · Sans marque</div><div class="xs muted">Très bon état</div></div>
+    <div><div class="photo" style="background:linear-gradient(160deg,#9aa3ad,#4d5560)"><span class="heart">♥</span><div class="onphoto"><span class="badge" style="background:rgba(0,0,0,.6);color:#fff">Réservé</span></div></div>
+      <div class="price">120 DT</div><div class="sm muted">42 · Clarks</div><div class="xs muted">Bon état</div></div>
+  </div>
+
+  <h2>Boutons</h2>
+  <div class="row"><button class="btn primary">Acheter</button><button class="btn primary pressed">Pressé</button><button class="btn secondary">Faire une offre</button></div>
+  <div class="row" style="margin-top:8px"><button class="btn ghost">Annuler</button><button class="btn danger">Supprimer</button><button class="btn primary disabled">Désactivé</button><button class="btn primary focus">Focus</button></div>
+
+  <h2>Badges</h2>
+  <div class="row"><span class="badge b-vintage">Vintage · 1980s</span><span class="badge b-success">Terminé</span><span class="badge b-warning">Offre en attente</span><span class="badge b-danger">Litige</span><span class="badge b-neutral">Vendu</span></div>
+
+  <h2>Formulaire</h2>
+  <div class="field"><label>Titre</label><div class="input foc">Veste en cuir vintage</div></div>
+  <div class="field" style="margin-top:16px"><label>Prix</label><div class="input err">5 DT</div><div class="errtxt">Le prix minimum est 1 DT, maximum 40 % de remise sur une offre.</div></div>
+  <div class="field" style="margin-top:16px"><label>Catégorie</label><div class="input muted" style="justify-content:space-between">Choisir une catégorie <span>›</span></div></div>
+
+  <h2>Messages</h2>
+  <div class="bubble theirs sm">Bonjour, la veste est toujours disponible ?</div>
+  <div class="bubble mine sm">Oui ! Elle date des années 80.</div>
+  <div class="offer"><div class="row" style="justify-content:space-between"><span class="sm muted">Offre de Sami</span><span class="badge b-warning">Expire dans 46 h</span></div>
+    <div class="row" style="margin:8px 0"><span class="muted strike">35 DT</span><span style="font-weight:700;font-size:22px">28 DT</span></div>
+    <div class="row"><button class="btn primary" style="height:36px">Accepter</button><button class="btn secondary" style="height:36px">Contre-offre</button><button class="btn ghost" style="height:36px">Refuser</button></div></div>
+
+  <h2>Récapitulatif</h2>
+  <div class="card sm">
+    <div class="line"><span>Article</span><span>28,000 DT</span></div>
+    <div class="line"><span>Protection acheteur</span><span>2,240 DT</span></div>
+    <div class="line"><span>Livraison (Sfax)</span><span>7,000 DT</span></div>
+    <div class="line total"><span>Total</span><span>37,240 DT</span></div>
+    <div class="xs muted" style="margin-top:6px">Paiement à la livraison</div>
+  </div>
+  <div style="margin-top:16px"><button class="btn primary full">Commander</button></div>
+
+  <nav class="tabbar"><span class="tab on"><span class="dot"></span>Accueil</span><span class="tab"><span class="dot"></span>Rechercher</span><span class="sell">+</span><span class="tab"><span class="dot"></span>Messages</span><span class="tab"><span class="dot"></span>Profil</span></nav>
+</body></html>
