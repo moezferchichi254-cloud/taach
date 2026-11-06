@@ -98,9 +98,9 @@ module.exports = {
     "9": "64px"
   },
   "borderRadius": {
-    "sm": "6px",
-    "md": "10px",
-    "lg": "16px",
+    "sm": "4px",
+    "md": "6px",
+    "lg": "12px",
     "pill": "999px"
   }
 };

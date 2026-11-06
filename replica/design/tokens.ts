@@ -96,9 +96,9 @@ export const tokens = {
     64
   ],
   "radius": {
-    "sm": 6,
-    "md": 10,
-    "lg": 16,
+    "sm": 4,
+    "md": 6,
+    "lg": 12,
     "pill": 999
   },
   "shadow": {
@@ -132,11 +132,14 @@ export const tokens = {
     "screen-padding": 16,
     "grid-columns": 2,
     "grid-gap": 12,
-    "card-image-ratio": "4:5",
+    "card-image-ratio": "1:1.3",
     "header-height": 52,
     "tab-bar-height": 56,
     "min-touch": 44,
-    "bottom-sheet-radius": 16
+    "bottom-sheet-radius": 16,
+    "section-gap": 8,
+    "row-height": 56,
+    "field-height": 56
   },
   "font": {
     "sans": "Inter",

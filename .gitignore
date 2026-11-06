@@ -1,0 +1,7 @@
+# Reference screenshots of the original app: local only, never committed or shipped.
+replica/screens/*.png
+node_modules/
+.expo/
+dist/
+.env*
+!.env.example

@@ -6,11 +6,39 @@ Contrast: 46 pairs, light and dark, 0 AA failures (`contrast.py tokens.json`).
 
 ## Where this comes from
 
-No reference screenshots were available (`replica/screens/` is empty), so
-nothing here is measured from Vinted. The system follows standard mobile
-marketplace patterns (2-column photo grid, bottom tab bar, bottom sheets,
-chat with structured cards) on a 4px grid. Nothing is taken from Vinted:
-not its teal, its logo, icons, illustrations, font or wording.
+Layout and hierarchy are measured from Vinted's public App Store screenshots
+(fr store, 2026-11-06), kept locally in `replica/screens/` and git-ignored:
+S02 feed, S04 grid, S06 item, S11 sell form, S18 checkout. What is taken is
+**structure**: what sits where, in which order, how dense. What is not taken:
+their teal, logo, icons, illustrations, marketing font, photos or wording.
+Every label below is written fresh.
+
+### Layout reference (from the screenshots)
+
+- **Flat and quiet.** Hairline dividers, almost no shadows, small radii
+  (4-6px). Photos carry the colour.
+- **Grouped sections.** Forms, checkout and settings are white sections on a
+  light grey page, separated by 8px grey bands. Rows are full width, 56 high,
+  label at the start and a chevron or value at the end.
+- **Floating-label fields.** Small label (xs, text-muted) inside the box at
+  the top, value (base) under it; 56 high single line.
+- **Item page order:** full-bleed photo carousel with back and more buttons
+  over it, favourite count pill at the bottom end of the photo, page dots at
+  the bottom centre; seller row (avatar, name, stars + count, outlined
+  Message button at the end); title, condition; small item price, then the
+  total incl. buyer fee larger with a shield icon; grey rounded info box
+  about buyer protection; sticky buy / offer buttons.
+- **Checkout order:** header (Annuler at the start, title centred); centred
+  item photo; breakdown rows (label start, amount end, total bold); address
+  section with an edit icon; delivery options; payment; sticky pay button.
+- **Feed / grid:** 2 columns, tall photos (about 1:1.3), small favourite heart
+  at the bottom end of the photo, 2-3 short text lines under it; search bar at
+  the top with a saved-search icon at the end; 5-icon tab bar with Sell in the
+  middle.
+- **Sell form:** close at the start, centred title; hint line "up to 20
+  photos" with a tips link; horizontal row of photo thumbnails with a remove
+  button on each; then grouped sections: title, description (multiline),
+  then pick rows (Catégorie ›, Marque ›, Taille ›, État ›, Prix ›).
 
 ## Direction
 
@@ -55,7 +83,8 @@ Button
   sizes     sm 36, md 44, lg 52 (full width in sticky footers)
   states    default, pressed (accent-pressed), focused (2px focus ring, 2px offset),
             disabled (40% opacity, not pressable), loading (spinner replaces icon, label kept)
-  tokens    radius pill, font base/600, padding x 20
+  tokens    radius md (6), font base/600, padding x 20; secondary = 1px accent outline
+            (the outlined "Message" button on S06 is secondary sm)
   a11y      role button, label = visible text, state busy while loading
   used on   all
 ```
@@ -72,10 +101,11 @@ IconButton
 ```
 TextField
   variants  single line, multiline (description, 3000 chars with counter), price (TND, numeric keypad)
-  parts     label (sm/600), input, helper or error text (xs), optional leading icon / trailing action
-  states    default (border-input), focused (2px accent border), filled, error (danger border + message),
-            disabled, read-only
-  tokens    height 48, radius md, bg bg, padding x 12
+  parts     floating label inside the box (xs, text-muted, top), value (base) below it,
+            helper or error text (xs) under the box, optional trailing action
+  states    empty (label centred as placeholder), focused (label moves up, 2px accent border),
+            filled, error (danger border + message), disabled, read-only
+  tokens    height 56 (multiline grows, min 120), radius sm (4), bg bg, padding x 12, 1px border-input
   a11y      label tied to input, error announced, correct keyboard type and autocomplete
   used on   S01, S11, S16, S18, S24, S27, S28
 ```
@@ -117,7 +147,7 @@ Chip
 Badge
   variants  vintage (bg vintage-bg, text vintage), status success / warning / danger (matching -bg),
             neutral (surface-2), on-photo (black 60% alpha, white)
-  tokens    height 22, radius sm, font xs/600, uppercase off
+  tokens    height 22, radius sm (4), font xs/600, uppercase off
   used on   item cards (Vintage, Réservé, Vendu), S21, S22
 ```
 
@@ -191,10 +221,34 @@ EmptyState
 ## Composed components
 
 ```
+GroupedSection
+  layout    page bg surface; section bg bg; 8px surface band between sections;
+            optional section title (xs/600, text-muted, 16 padding); rows separated by hairlines
+  rows      NavRow (label, value, chevron), FieldRow (floating-label field), ToggleRow, InfoRow
+  used on   S11, S18, S22, S23, S26, S28
+```
+
+```
+ItemDetailHeader (S06)
+  parts     full-bleed PhotoCarousel; back and more IconButtons (on-photo) over the top;
+            favourite pill (heart + count, white, radius pill) at the bottom end; page dots bottom centre
+  then      SellerRow (Avatar 40, name sm/600, StarRating display, secondary sm "Message" at the end),
+            title (lg), condition (sm, text-muted), price (sm, text-muted),
+            total incl. fee (base/700 + shield icon), ProtectionNote (surface box, radius lg, xs text)
+```
+
+```
+ProtectionNote
+  layout    bg surface, radius lg (12), padding 16, shield icon, 2-3 lines xs text, "En savoir plus" link
+  used on   S06, S18
+```
+
+```
 ItemCard
-  layout    photo 4:5, radius md; favourite IconButton (on-photo) top end;
-            Badge row bottom start on photo (Vintage, Réservé, Vendu);
-            below: price (PriceText), size + brand (text-muted sm, 1 line), condition (xs)
+  layout    photo about 1:1.3, radius sm; favourite heart (small, white circle) bottom end
+            of the photo with count when > 0; Badge row top start on the photo (Vintage,
+            Réservé, Vendu); below: brand or title (sm, 1 line), size + condition (xs, text-muted),
+            price (PriceText), price incl. fee (xs, text-muted)
   states    default, pressed, favourited (filled heart, haptic), sold (photo 60% + Vendu badge),
             reserved, bumped ("Promu" xs label, could-have), loading (Skeleton)
   grid      2 columns, gap 12, screen padding 16
