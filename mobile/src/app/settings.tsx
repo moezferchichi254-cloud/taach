@@ -13,7 +13,7 @@ import { Text } from '../components/Text';
 import {
   ApiError, deleteAccount, saveAddress, savePayoutMethod, selectBundleDiscounts, selectMe, selectMyAddress, selectPayoutMethods,
   setBundleDiscounts, updateProfile, useStore,
-} from '../data/fake';
+} from '../data';
 import type { PayoutMethod } from '../data/types';
 import { GOVERNORATES } from '../lib/governorates';
 import { useTheme } from '../theme';

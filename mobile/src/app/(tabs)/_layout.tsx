@@ -2,7 +2,7 @@ import { Tabs } from 'expo-router/js-tabs';
 import { Home, MessageCircle, Plus, Search, User } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { selectUnreadCount, useStore } from '../../data/fake';
+import { selectUnreadCount, useStore } from '../../data';
 import { useTheme } from '../../theme';
 
 export default function TabLayout() {

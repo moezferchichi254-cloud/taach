@@ -31,22 +31,22 @@ Fee breakdown: item + buyer protection fee + shipping,checkout,must,yes,yes,"S18
 Cash on delivery (courier collects the total),payments,must,yes,partial,COD order flow works on the fake data layer; no courier cash remittance
 Hold seller money until the order completes,payments,must,yes,partial,ledger entry pending until completion (fake data layer)
 Courier pickup booked + label/tracking number for the seller,shipping,must,yes,partial,seller marks handed over; tracking number is fake
-Shipping deadline for seller + auto-cancel if not shipped,orders,must,yes,partial,deadline shown; auto-cancel job in /replica-backend
+Shipping deadline for seller + auto-cancel if not shipped,orders,must,yes,yes,job_cancel_late_orders + automatic 1-star review
 Parcel tracking in the app,shipping,must,yes,no,carrier webhooks
-Buyer 2-day window after delivery: confirm or report problem,orders,must,yes,partial,confirm works; auto-complete job and claim screen not yet
+Buyer 2-day window after delivery: confirm or report problem,orders,must,yes,yes,"confirm, claims, job_auto_complete"
 Claims: not received / damaged / not as described with evidence photos,disputes,must,yes,partial,"S24 with photos, order goes to dispute; admin decision in /replica-backend"
 Refund and return flow on accepted claims,disputes,must,yes,no,
 Leave feedback (stars + text) both ways,reviews,must,yes,yes,S25 after completion; rating recalculated
-Automatic feedback when nobody leaves one,reviews,should,yes,no,positive if buyer silent; negative if seller never shipped
+Automatic feedback when nobody leaves one,reviews,should,yes,yes,job_auto_feedback (5 stars) and late shipping (1 star)
 Edit / delete feedback you left,reviews,could,yes,no,not yet
 Balance: pending vs available,wallet,must,yes,yes,S26 with history
 Withdraw to bank (RIB) / D17 / Flouci wallet,wallet,must,yes,partial,payout account + withdrawal request; admin pays it in /replica-backend
 Identity check (CIN) before first payout,wallet,must,yes,partial,S27 upload + pending; admin review in /replica-backend
 Orders list (bought / sold) with statuses,orders,must,yes,yes,S21
-Push + in-app notifications,notifications,must,yes,partial,in-app list + unread badge; push in /replica-backend
+Push + in-app notifications,notifications,must,yes,partial,"in-app list; push via send-push Edge Function, not run live"
 Report a listing or member,safety,must,yes,yes,S32
 Block a member,safety,should,yes,yes,member page; chat closed when blocked
-Admin moderation console (listings / users / claims),admin,must,no,no,not visible to users but required to run it
+Admin moderation console (listings / users / claims),admin,must,no,partial,admin actions as database functions; no web app yet
 Bump a listing (paid boost 3 or 7 days),promotion,could,yes,no,monetisation option
 Wardrobe spotlight / promoted closets,promotion,could,yes,no,
 Holiday mode (pause wardrobe),profile,could,guess,yes,S28; hides items from feed and search
@@ -58,13 +58,13 @@ Existing catalogue and member base,network,could,yes,skip,their users and listin
 Negotiated carrier shipping rates,shipping,could,yes,skip,partner deals; you negotiate your own
 Electronics authenticity / item verification service,trust,could,yes,skip,operational service with partners; out of slice
 Community forum,community,could,yes,skip,out of slice
-Sign up with phone number + SMS code,onboarding,must,guess,partial,demo: any 4-digit code; real SMS in /replica-backend
+Sign up with phone number + SMS code,onboarding,must,guess,partial,Supabase phone OTP wired; needs an SMS provider; demo accepts any code
 French and English interface (Arabic later; layout ready for right-to-left),onboarding,must,yes,partial,FR + EN on every built screen; RTL not tested yet
 Prices in TND (millimes),checkout,must,no,yes,integer millimes everywhere
 Vintage flag + era / decade on listings,sell,must,no,yes,"S11 toggle + era, badge on cards and S06"
 Categories beyond clothes (decor / books / vinyl / objects),browse,should,yes,no,second-hand and vintage articles in general
 Online payment via Konnect or Flouci (card / e-DINAR / wallet),payments,should,no,no,BCT-authorised Tunisian gateways; amounts in millimes
 Hand delivery: meet in person and confirm in app,shipping,should,no,partial,selectable at checkout; no in-person confirmation code yet
-COD remittance reconciliation for admins,admin,must,no,no,match courier cash transfers to orders before releasing seller money
-Buyer refuses parcel at the door: return to seller,orders,must,no,no,needs the courier integration
+COD remittance reconciliation for admins,admin,must,no,partial,admin_reconcile_cod(); no admin screen yet
+Buyer refuses parcel at the door: return to seller,orders,must,no,partial,courier_update(refused) puts items back on sale; needs a courier
 Pickup-point delivery,shipping,could,yes,no,only if a Tunisian courier offers relay points

@@ -5,7 +5,7 @@ import { FlatList, Pressable, View } from 'react-native';
 import { Toggle } from '../components/Toggle';
 import { Empty } from '../components/Empty';
 import { Text } from '../components/Text';
-import { deleteSavedSearch, selectCategories, selectSavedSearches, toggleSearchAlerts, useStore } from '../data/fake';
+import { deleteSavedSearch, selectCategories, selectSavedSearches, toggleSearchAlerts, useStore } from '../data';
 import { setSearch } from '../data/searchState';
 import { useTheme } from '../theme';
 

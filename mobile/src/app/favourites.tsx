@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { Empty } from '../components/Empty';
 import { ItemGrid } from '../components/ItemGrid';
-import { selectFavourites, useStore } from '../data/fake';
+import { selectFavourites, useStore } from '../data';
 import { useTheme } from '../theme';
 
 // S09 favourites

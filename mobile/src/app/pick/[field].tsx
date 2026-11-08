@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable } from 'react-native';
 import { Text } from '../../components/Text';
 import { setDraft, useDraft, type Draft } from '../../data/draft';
-import { selectCategories, useStore } from '../../data/fake';
+import { selectCategories, useStore } from '../../data';
 import { CONDITIONS, ERAS, PARCELS, SIZES } from '../../lib/options';
 import { useTheme } from '../../theme';
 

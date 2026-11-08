@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { respondOffer, selectMe, selectOffer, selectProfile, useStore } from '../data/fake';
+import { respondOffer, selectMe, selectOffer, selectProfile, useStore } from '../data';
 import type { Conversation } from '../data/types';
 import { formatTND } from '../lib/money';
 import { longDate } from '../lib/time';

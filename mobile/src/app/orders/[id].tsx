@@ -11,7 +11,7 @@ import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
 import { Timeline } from '../../components/Timeline';
 import { confirm } from '../../components/Confirm';
-import { cancelOrder, confirmReceived, devMarkDelivered, markShipped, selectClaim, selectItem, selectMe, selectMyFeedbackOn, selectOrder, selectProfile, useStore } from '../../data/fake';
+import { demoMode, cancelOrder, confirmReceived, devMarkDelivered, markShipped, selectClaim, selectItem, selectMe, selectMyFeedbackOn, selectOrder, selectProfile, useStore } from '../../data';
 import { formatTND } from '../../lib/money';
 import { useTheme } from '../../theme';
 
@@ -53,12 +53,12 @@ export default function OrderScreen() {
   } else if (isBuyer && order.status === 'shipped') {
     footer = (
       <>
-        <Button full variant="secondary" label={tr('orders.devDelivered')} onPress={run(() => devMarkDelivered(order.id))} loading={busy} testID="dev-delivered" />
-        <Text variant="xs" color="text-muted" center>{tr('orders.devNote')}</Text>
+        {demoMode ? <Button full variant="secondary" label={tr('orders.devDelivered')} onPress={run(() => devMarkDelivered(order.id))} loading={busy} testID="dev-delivered" /> : null}
+        {demoMode ? <Text variant="xs" color="text-muted" center>{tr('orders.devNote')}</Text> : null}
         <Button full variant="ghost" label={tr('claim.reasons.not_received')} onPress={() => router.push(`/claim/${order.id}`)} />
       </>
     );
-  } else if (order.status === 'shipped') {
+  } else if (demoMode && order.status === 'shipped') {
     footer = (
       <>
         <Button full variant="secondary" label={tr('orders.devDelivered')} onPress={run(() => devMarkDelivered(order.id))} loading={busy} testID="dev-delivered" />

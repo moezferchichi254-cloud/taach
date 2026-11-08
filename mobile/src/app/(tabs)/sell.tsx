@@ -13,7 +13,7 @@ import { Photo } from '../../components/Photo';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
 import { resetDraft, setDraft, useDraft } from '../../data/draft';
-import { createItem, selectCategories, useStore } from '../../data/fake';
+import { createItem, selectCategories, useStore } from '../../data';
 import { parseTND } from '../../lib/money';
 import { useTheme } from '../../theme';
 

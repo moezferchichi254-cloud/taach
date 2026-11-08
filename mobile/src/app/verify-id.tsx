@@ -8,7 +8,7 @@ import { Section } from '../components/Grouped';
 import { PhotoPicker } from '../components/PhotoPicker';
 import { Screen } from '../components/Screen';
 import { Text } from '../components/Text';
-import { devApproveId, selectIdVerification, selectMe, submitIdVerification, useStore } from '../data/fake';
+import { demoMode, devApproveId, selectIdVerification, selectMe, submitIdVerification, useStore } from '../data';
 import type { Photo } from '../data/types';
 import { useTheme } from '../theme';
 
@@ -33,7 +33,7 @@ export default function VerifyId() {
 
   return (
     <Screen grouped footer={status === 'pending'
-      ? <Button full variant="secondary" label={tr('verify.devApprove')} onPress={devApproveId} testID="dev-approve" />
+      ? !demoMode ? null : <Button full variant="secondary" label={tr('verify.devApprove')} onPress={devApproveId} testID="dev-approve" />
       : status === 'approved' ? null
       : <Button full size="lg" label={tr('verify.submit')} onPress={send} loading={busy} testID="send-id" />}>
       <Stack.Screen options={{ title: tr('verify.title') }} />

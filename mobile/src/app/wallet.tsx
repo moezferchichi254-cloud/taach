@@ -8,8 +8,8 @@ import { NavRow, Section } from '../components/Grouped';
 import { Screen } from '../components/Screen';
 import { Text } from '../components/Text';
 import {
-  devReconcileCod, requestPayout, selectLedger, selectMe, selectPayoutMethods, selectPayouts, selectWallet, useStore,
-} from '../data/fake';
+  demoMode, devReconcileCod, requestPayout, selectLedger, selectMe, selectPayoutMethods, selectPayouts, selectWallet, useStore,
+} from '../data';
 import { formatTND } from '../lib/money';
 import { shortTime } from '../lib/time';
 import { useTheme } from '../theme';
@@ -58,7 +58,7 @@ export default function Wallet() {
         {w.pendingMillimes > 0 ? (
           <View style={{ marginTop: t.space[3], gap: t.space[2] }}>
             <Text variant="xs" color="text-muted">{tr('wallet.pendingHint')}</Text>
-            <Button label={tr('wallet.devReconcile')} variant="secondary" size="sm" onPress={devReconcileCod} testID="dev-reconcile" />
+            {demoMode ? <Button label={tr('wallet.devReconcile')} variant="secondary" size="sm" onPress={devReconcileCod} testID="dev-reconcile" /> : null}
           </View>
         ) : null}
       </Section>

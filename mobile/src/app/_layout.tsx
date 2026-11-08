@@ -1,14 +1,18 @@
 import '../i18n';
 import { Redirect, Stack, useSegments } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { selectMe, useStore } from '../data/fake';
+import { restoreSession, selectMe, useStore } from '../data';
 import { ThemeRoot, useTheme } from '../theme';
 
 function Nav() {
   const t = useTheme();
   const me = useStore(selectMe);
   const segments = useSegments();
+  const [ready, setReady] = useState(false);
+  useEffect(() => { restoreSession().catch(() => {}).finally(() => setReady(true)); }, []);
+  if (!ready) return null;
   const onSignIn = segments[0] === 'sign-in';
   if (!me && !onSignIn) return <Redirect href="/sign-in" />;
   if (me && onSignIn) return <Redirect href="/" />;

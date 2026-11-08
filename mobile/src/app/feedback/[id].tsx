@@ -8,7 +8,7 @@ import { Field } from '../../components/Field';
 import { Section } from '../../components/Grouped';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
-import { leaveFeedback } from '../../data/fake';
+import { leaveFeedback } from '../../data';
 import { useTheme } from '../../theme';
 
 // S25 leave a review after a completed order

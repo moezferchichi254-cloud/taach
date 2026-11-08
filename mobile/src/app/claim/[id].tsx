@@ -8,7 +8,7 @@ import { Section } from '../../components/Grouped';
 import { PhotoPicker } from '../../components/PhotoPicker';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
-import { ApiError, openClaim, selectOrder, useStore } from '../../data/fake';
+import { ApiError, openClaim, selectOrder, useStore } from '../../data';
 import type { ClaimReason, Photo } from '../../data/types';
 import { useTheme } from '../../theme';
 

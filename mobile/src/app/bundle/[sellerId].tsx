@@ -9,7 +9,7 @@ import { InfoRow } from '../../components/Grouped';
 import { Photo } from '../../components/Photo';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
-import { selectBundleDiscounts, selectWardrobe, useStore } from '../../data/fake';
+import { selectBundleDiscounts, selectWardrobe, useStore } from '../../data';
 import { formatTND } from '../../lib/money';
 import { useTheme } from '../../theme';
 

@@ -10,7 +10,7 @@ import { Photo } from '../../components/Photo';
 import { Text } from '../../components/Text';
 import {
   markConversationRead, selectConversation, selectIsBlocked, selectItem, selectMe, selectMessages, selectProfile, sendMessage, useStore,
-} from '../../data/fake';
+} from '../../data';
 import type { Message } from '../../data/types';
 import { formatTND } from '../../lib/money';
 import { shortTime } from '../../lib/time';

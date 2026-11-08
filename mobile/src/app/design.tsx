@@ -10,7 +10,7 @@ import { ItemCard } from '../components/ItemCard';
 import { Screen } from '../components/Screen';
 import { Text } from '../components/Text';
 import { Timeline } from '../components/Timeline';
-import { selectFeed, useStore } from '../data/fake';
+import { selectFeed, useStore } from '../data';
 import { useTheme } from '../theme';
 
 // Hidden page: every primitive in isolation (the design system check).

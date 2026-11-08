@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '../components/Button';
 import { Field } from '../components/Field';
 import { Text } from '../components/Text';
-import { signInWithPhone } from '../data/fake';
+import { ApiError, demoMode, sendPhoneCode, signInWithPhone } from '../data';
 import { useTheme } from '../theme';
 
 // S01: phone number + SMS code. Demo: any 4-digit code works.
@@ -24,11 +24,17 @@ export default function SignIn() {
     setError(null);
     if (step === 'phone') {
       if (digits.length !== 8) return setError(tr('auth.invalidPhone'));
-      return setStep('code');
+      setBusy(true);
+      try { await sendPhoneCode('+216' + digits); setStep('code'); }
+      catch { setError(tr('common.error')); }
+      finally { setBusy(false); }
+      return;
     }
-    if (!/^\d{4}$/.test(code)) return setError(tr('auth.invalidCode'));
+    if (!/^\d{4,6}$/.test(code)) return setError(tr('auth.invalidCode'));
     setBusy(true);
-    try { await signInWithPhone('+216' + digits, code); } finally { setBusy(false); }
+    try { await signInWithPhone('+216' + digits, code); }
+    catch (e) { setError(e instanceof ApiError ? tr('auth.invalidCode') : tr('common.error')); }
+    finally { setBusy(false); }
   }
 
   return (
@@ -51,8 +57,8 @@ export default function SignIn() {
           />
           {step === 'code' ? (
             <>
-              <Field label={tr('auth.code')} value={code} onChangeText={setCode} keyboardType="number-pad" autoComplete="one-time-code" maxLength={4} error={error} autoFocus testID="code" />
-              <Text variant="xs" color="text-muted">{tr('auth.codeHint')}</Text>
+              <Field label={tr('auth.code')} value={code} onChangeText={setCode} keyboardType="number-pad" autoComplete="one-time-code" maxLength={6} error={error} autoFocus testID="code" />
+              {demoMode ? <Text variant="xs" color="text-muted">{tr('auth.codeHint')}</Text> : null}
             </>
           ) : null}
         </View>

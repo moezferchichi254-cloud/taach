@@ -6,7 +6,7 @@ import { Badge, Chip } from '../../components/Bits';
 import { Empty } from '../../components/Empty';
 import { Photo } from '../../components/Photo';
 import { Text } from '../../components/Text';
-import { selectMyOrders, useStore } from '../../data/fake';
+import { selectMyOrders, useStore } from '../../data';
 import type { Order } from '../../data/types';
 import { formatTND } from '../../lib/money';
 import { useTheme } from '../../theme';

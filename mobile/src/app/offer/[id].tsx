@@ -9,7 +9,7 @@ import { InfoRow, Section } from '../../components/Grouped';
 import { Photo } from '../../components/Photo';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
-import { ApiError, makeOffer, selectItems, useStore } from '../../data/fake';
+import { ApiError, makeOffer, selectItems, useStore } from '../../data';
 import { formatTND, parseTND } from '../../lib/money';
 import { MAX_OFFER_DISCOUNT } from '../../lib/pricing';
 import { useTheme } from '../../theme';

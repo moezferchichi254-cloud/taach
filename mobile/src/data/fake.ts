@@ -11,7 +11,7 @@ import type {
   PayoutMethod, Photo, Profile, Quote, ReportTarget, SavedSearch, SearchFilters, Wallet,
 } from './types';
 
-type State = {
+export type State = {
   me: string | null;
   profiles: Profile[];
   addresses: Address[];
@@ -84,6 +84,10 @@ export function useStore<T>(select: (s: State) => T, key: string | number | null
 }
 
 export class ApiError extends Error {}
+
+/** Used by the Supabase data layer to load server data into the same store. */
+export function hydrate(next: Partial<State>) { set(next); }
+export function readStore(): State { return state; }
 const wait = () => new Promise((r) => setTimeout(r, 150));
 const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 10)}`;
 const now = () => new Date().toISOString();
@@ -100,6 +104,11 @@ function notify(userId: string, kind: NotificationKind, fr: string, en: string, 
 }
 
 // ---------------------------------------------------------------- auth
+
+export async function sendPhoneCode(phone: string) {
+  await wait();
+  if (!/^\+216\d{8}$/.test(phone)) throw new ApiError('invalid_phone');
+}
 
 export async function signInWithPhone(_phone: string, code: string) {
   await wait();

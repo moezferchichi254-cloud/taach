@@ -11,7 +11,7 @@ import { ReviewRow } from '../../components/ReviewRow';
 import { Text } from '../../components/Text';
 import {
   selectBundleDiscounts, selectFeedbackFor, selectIsBlocked, selectMe, selectProfile, selectWardrobe, toggleBlock, useStore,
-} from '../../data/fake';
+} from '../../data';
 import { useTheme } from '../../theme';
 
 // S07 member profile: wardrobe + reviews (S08 inline)

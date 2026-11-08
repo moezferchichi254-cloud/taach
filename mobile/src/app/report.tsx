@@ -7,7 +7,7 @@ import { Field } from '../components/Field';
 import { Section } from '../components/Grouped';
 import { Screen } from '../components/Screen';
 import { Text } from '../components/Text';
-import { report } from '../data/fake';
+import { report } from '../data';
 import { useTheme } from '../theme';
 
 const REASONS = ['fake', 'forbidden', 'scam', 'offensive', 'spam', 'other'] as const;

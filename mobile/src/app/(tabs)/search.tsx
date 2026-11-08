@@ -8,7 +8,7 @@ import { Chip } from '../../components/Bits';
 import { Empty } from '../../components/Empty';
 import { ItemGrid } from '../../components/ItemGrid';
 import { Text } from '../../components/Text';
-import { saveSearch, searchItems, selectCategories, useStore } from '../../data/fake';
+import { saveSearch, searchItems, selectCategories, useStore } from '../../data';
 import { activeFilterCount, setFilters, setSearch, useSearch } from '../../data/searchState';
 import { useTheme } from '../../theme';
 

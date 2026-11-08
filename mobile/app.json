@@ -28,7 +28,13 @@
     "plugins": [
       "expo-image",
       "expo-localization",
-      "expo-router"
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "color": "#0F0F0F"
+        }
+      ]
     ],
     "scheme": "taach",
     "experiments": {

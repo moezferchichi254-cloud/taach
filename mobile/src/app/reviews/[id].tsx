@@ -5,7 +5,7 @@ import { Stars } from '../../components/Bits';
 import { Empty } from '../../components/Empty';
 import { ReviewRow } from '../../components/ReviewRow';
 import { Text } from '../../components/Text';
-import { selectFeedbackFor, selectProfile, useStore } from '../../data/fake';
+import { selectFeedbackFor, selectProfile, useStore } from '../../data';
 import { useTheme } from '../../theme';
 
 // S08 reviews

@@ -14,7 +14,7 @@ import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
 import {
   deleteItem, selectBundleDiscounts, selectCategories, selectItem, selectMe, selectProfile, setItemHidden, startConversation, useStore,
-} from '../../data/fake';
+} from '../../data';
 import { formatTND } from '../../lib/money';
 import { buyerFee } from '../../lib/pricing';
 import { useTheme } from '../../theme';

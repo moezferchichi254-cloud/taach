@@ -8,7 +8,7 @@ import { Chip } from '../../components/Bits';
 import { Empty } from '../../components/Empty';
 import { ItemGrid } from '../../components/ItemGrid';
 import { Text } from '../../components/Text';
-import { selectCategories, selectFeed, useStore } from '../../data/fake';
+import { selectCategories, selectFeed, useStore } from '../../data';
 import { useTheme } from '../../theme';
 
 // S02 home feed

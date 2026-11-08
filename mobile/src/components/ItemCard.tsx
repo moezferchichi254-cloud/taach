@@ -2,7 +2,7 @@ import { Link } from 'expo-router';
 import { Heart } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { Pressable, View } from 'react-native';
-import { selectIsFavourite, toggleFavourite, useStore } from '../data/fake';
+import { selectIsFavourite, toggleFavourite, useStore } from '../data';
 import type { Item } from '../data/types';
 import { buyerFee } from '../lib/pricing';
 import { formatTND } from '../lib/money';

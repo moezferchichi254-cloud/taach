@@ -8,7 +8,7 @@ import { Field } from '../components/Field';
 import { Section } from '../components/Grouped';
 import { Screen } from '../components/Screen';
 import { Text } from '../components/Text';
-import { searchItems, selectCategories, useStore } from '../data/fake';
+import { searchItems, selectCategories, useStore } from '../data';
 import { resetFilters, setFilters, useSearch } from '../data/searchState';
 import type { Condition, SearchFilters } from '../data/types';
 import { parseTND } from '../lib/money';

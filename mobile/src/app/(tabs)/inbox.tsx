@@ -9,7 +9,7 @@ import { Photo } from '../../components/Photo';
 import { Text } from '../../components/Text';
 import {
   markNotificationsRead, selectConversations, selectLastMessage, selectMe, selectNotifications, selectProfile, useStore,
-} from '../../data/fake';
+} from '../../data';
 import type { Conversation } from '../../data/types';
 import { shortTime } from '../../lib/time';
 import { useTheme } from '../../theme';

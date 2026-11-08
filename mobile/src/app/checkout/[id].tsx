@@ -10,7 +10,7 @@ import { InfoRow, Section } from '../../components/Grouped';
 import { Photo } from '../../components/Photo';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
-import { ApiError, checkout, quote, selectItems, selectMyAddress, useStore } from '../../data/fake';
+import { ApiError, checkout, quote, selectItems, selectMyAddress, useStore } from '../../data';
 import type { DeliveryMethod, Quote } from '../../data/types';
 import { formatTND } from '../../lib/money';
 import { useTheme } from '../../theme';

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { selectProfile, useStore } from '../data/fake';
+import { selectProfile, useStore } from '../data';
 import type { Feedback } from '../data/types';
 import { longDate } from '../lib/time';
 import { useTheme } from '../theme';

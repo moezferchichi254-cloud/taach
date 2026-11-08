@@ -5,7 +5,7 @@ import { Avatar, Chip, Stars } from '../../components/Bits';
 import { NavRow, Section } from '../../components/Grouped';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
-import { selectMe, selectWallet, signInAs, signOut, useStore } from '../../data/fake';
+import { demoMode, selectMe, selectWallet, signInAs, signOut, useStore } from '../../data';
 import { formatTND } from '../../lib/money';
 import { useTheme } from '../../theme';
 
@@ -39,11 +39,11 @@ export default function Profile() {
         <NavRow label={tr('profile.wardrobe')} onPress={() => router.push(`/member/${me.id}`)} />
         <NavRow label={tr('profile.settings')} onPress={() => router.push('/settings')} last />
       </Section>
-      <Section title={tr('profile.demoUser')}>
+      {demoMode ? <Section title={tr('profile.demoUser')}>
         <View style={{ flexDirection: 'row', gap: t.space[2], flexWrap: 'wrap' }}>
           {profiles.map((p) => <Chip key={p.id} label={p.displayName} selected={p.id === me.id} onPress={() => signInAs(p.id)} />)}
         </View>
-      </Section>
+      </Section> : null}
       <Section flush>
         <NavRow label={tr('profile.design')} onPress={() => router.push('/design')} />
         <NavRow label={tr('profile.signOut')} onPress={signOut} last />
