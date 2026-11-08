@@ -13,8 +13,11 @@ export type Profile = {
   id: string;
   username: string;
   displayName: string;
+  bio?: string;
   governorate: string;
   city: string;
+  holidayMode?: boolean;
+  createdAt?: string;
   ratingAvg: number;
   ratingCount: number;
   idVerified: boolean;
@@ -87,15 +90,107 @@ export type Order = Quote & {
   completesAt: string | null;
   completedAt: string | null;
   trackingNumber: string | null;
+  offerId: string | null;
+  cancelReason?: string | null;
 };
 
 export type LedgerEntry = {
   id: string;
   userId: string;
-  orderId: string;
-  kind: 'sale';
+  orderId: string | null;
+  payoutId?: string;
+  kind: 'sale' | 'payout' | 'adjustment';
   amountMillimes: number;
   state: 'pending' | 'available';
 };
 
 export type Wallet = { pendingMillimes: number; availableMillimes: number };
+
+export type Conversation = {
+  id: string;
+  itemId: string | null;
+  buyerId: string;
+  sellerId: string;
+  lastMessageAt: string;
+  buyerReadAt: string | null;
+  sellerReadAt: string | null;
+};
+
+export type Message = {
+  id: string;
+  conversationId: string;
+  senderId: string | null; // null = system
+  kind: 'text' | 'offer' | 'order_event' | 'system';
+  body: string | null;
+  offerId?: string;
+  orderId?: string;
+  flagged: boolean;
+  createdAt: string;
+};
+
+export type OfferStatus = 'pending' | 'accepted' | 'declined' | 'countered' | 'expired' | 'used';
+export type Offer = {
+  id: string;
+  conversationId: string;
+  fromUserId: string;
+  itemIds: string[];
+  listPriceMillimes: number;
+  amountMillimes: number;
+  parentOfferId: string | null;
+  status: OfferStatus;
+  expiresAt: string;
+  createdAt: string;
+};
+
+export type Feedback = {
+  id: string;
+  orderId: string | null;
+  fromUserId: string | null; // null = automatic
+  toUserId: string;
+  role: 'buyer_to_seller' | 'seller_to_buyer';
+  stars: number;
+  body: string | null;
+  isAutomatic: boolean;
+  createdAt: string;
+};
+
+export type ClaimReason = 'not_received' | 'damaged' | 'not_as_described' | 'counterfeit' | 'other';
+export type Claim = {
+  id: string;
+  orderId: string;
+  openedBy: string;
+  reason: ClaimReason;
+  description: string;
+  photos: Photo[];
+  status: 'open' | 'seller_responded' | 'return_requested' | 'refunded' | 'rejected' | 'escalated';
+  createdAt: string;
+};
+
+export type SearchFilters = {
+  categoryId?: string | null;
+  sizes?: string[];
+  conditions?: Condition[];
+  vintageOnly?: boolean;
+  minMillimes?: number | null;
+  maxMillimes?: number | null;
+  sort?: 'relevance' | 'newest' | 'price_asc' | 'price_desc';
+};
+
+export type SavedSearch = { id: string; userId: string; query: string; filters: SearchFilters; alertsOn: boolean; createdAt: string };
+
+export type NotificationKind = 'message' | 'offer' | 'order_update' | 'favourite' | 'feedback' | 'claim' | 'payout' | 'id_check';
+export type AppNotification = {
+  id: string;
+  userId: string;
+  kind: NotificationKind;
+  text: { fr: string; en: string };
+  href: string | null;
+  readAt: string | null;
+  createdAt: string;
+};
+
+export type PayoutMethod = { id: string; userId: string; kind: 'bank_rib' | 'd17' | 'flouci_wallet'; holderName: string; accountRef: string };
+export type Payout = { id: string; userId: string; amountMillimes: number; methodId: string; status: 'requested' | 'processing' | 'paid' | 'failed'; requestedAt: string };
+export type IdVerification = { userId: string; status: 'pending' | 'approved' | 'rejected'; createdAt: string };
+export type BundleDiscount = { sellerId: string; minItems: number; percent: number };
+export type ReportTarget = { type: 'item' | 'user' | 'message'; id: string };

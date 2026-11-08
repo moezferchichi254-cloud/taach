@@ -1,4 +1,4 @@
-import { Link, Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, View } from 'react-native';
@@ -16,8 +16,7 @@ function Row({ order }: { order: Order }) {
   const { t: tr, i18n } = useTranslation();
   const item = useStore((s) => s.items.find((i) => i.id === order.itemIds[0]), order.itemIds[0]);
   return (
-    <Link href={`/orders/${order.id}`} asChild>
-      <Pressable accessibilityRole="link" style={({ pressed }) => ({ flexDirection: 'row', gap: t.space[3], padding: t.layout['screen-padding'], borderBottomWidth: 1, borderBottomColor: t.c.border, backgroundColor: pressed ? t.c.surface : t.c.bg })}>
+      <Pressable accessibilityRole="link" accessibilityLabel={`${item?.title ?? ''}, ${tr(`orders.status.${order.status}`)}`} onPress={() => router.push(`/orders/${order.id}`)} style={({ pressed }) => ({ flexDirection: 'row', gap: t.space[3], padding: t.layout['screen-padding'], borderBottomWidth: 1, borderBottomColor: t.c.border, backgroundColor: pressed ? t.c.surface : t.c.bg })}>
         <Photo photo={item?.photos[0]} label={item?.title ?? ''} style={{ width: 56, height: 70, borderRadius: t.radius.sm }} />
         <View style={{ flex: 1, gap: 4 }}>
           <Text numberOfLines={1}>{item?.title}</Text>
@@ -25,7 +24,6 @@ function Row({ order }: { order: Order }) {
           <Badge label={tr(`orders.status.${order.status}`)} tone={order.status === 'completed' ? 'success' : 'neutral'} />
         </View>
       </Pressable>
-    </Link>
   );
 }
 

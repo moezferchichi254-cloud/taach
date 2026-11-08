@@ -1,4 +1,4 @@
-import type { Address, Category, Item, Profile } from './types';
+import type { Address, BundleDiscount, Category, Feedback, Item, Profile } from './types';
 
 // Demo data only. Placeholder photos are flat tones, no real images.
 
@@ -31,4 +31,18 @@ export const seedItems: Item[] = [
   { id: 'i-4', sellerId: 'u-leila', title: 'Baskets Adidas Gazelle', description: 'Pointure 42, semelle en très bon état.', categoryId: 'c-men', brand: 'Adidas', size: '42', condition: 'very_good', isVintage: false, era: null, priceMillimes: 95000, parcelSize: 'medium', status: 'active', photos: [{ uri: null, tone: '#3f5a46' }], favouriteCount: 21, createdAt: ago(20) },
   { id: 'i-5', sellerId: 'u-amira', title: 'Théière en cuivre ciselé', description: 'Pièce artisanale, environ 40 ans.', categoryId: 'c-home', brand: null, size: null, condition: 'satisfactory', isVintage: true, era: '1980s', priceMillimes: 38000, parcelSize: 'small', status: 'active', photos: [{ uri: null, tone: '#9a6a32' }], favouriteCount: 6, createdAt: ago(30) },
   { id: 'i-6', sellerId: 'u-leila', title: 'Sac en paille tressée', description: 'Fait main à Nabeul, anses en cuir.', categoryId: 'c-acc', brand: null, size: null, condition: 'new_without_tags', isVintage: false, era: null, priceMillimes: 30000, parcelSize: 'small', status: 'active', photos: [{ uri: null, tone: '#b08d57' }], favouriteCount: 3, createdAt: ago(48) },
+];
+
+export const seedBundleDiscounts: BundleDiscount[] = [
+  { sellerId: 'u-amira', minItems: 2, percent: 10 },
+  { sellerId: 'u-amira', minItems: 3, percent: 15 },
+];
+
+// A few past reviews so profiles are not empty (demo only).
+export const seedFeedback: Feedback[] = [
+  { id: 'f-1', orderId: null, fromUserId: 'u-leila', toUserId: 'u-amira', role: 'buyer_to_seller', stars: 5, body: 'Pièce magnifique, très bien emballée. Merci !', isAutomatic: false, createdAt: ago(24 * 12) },
+  { id: 'f-2', orderId: null, fromUserId: 'u-sami', toUserId: 'u-amira', role: 'buyer_to_seller', stars: 5, body: 'Envoi rapide, conforme aux photos.', isAutomatic: false, createdAt: ago(24 * 30) },
+  { id: 'f-3', orderId: null, fromUserId: null, toUserId: 'u-amira', role: 'buyer_to_seller', stars: 5, body: null, isAutomatic: true, createdAt: ago(24 * 45) },
+  { id: 'f-4', orderId: null, fromUserId: 'u-amira', toUserId: 'u-leila', role: 'buyer_to_seller', stars: 5, body: 'Robe superbe, vendeuse adorable.', isAutomatic: false, createdAt: ago(24 * 20) },
+  { id: 'f-5', orderId: null, fromUserId: 'u-amira', toUserId: 'u-sami', role: 'buyer_to_seller', stars: 4, body: 'Bon contact, un peu de retard à l’envoi.', isAutomatic: false, createdAt: ago(24 * 60) },
 ];

@@ -4,53 +4,53 @@ Pick interests (sizes / categories) at onboarding,onboarding,could,guess,no,not 
 Tab bar: Home / Search / Sell / Inbox / Profile,navigation,must,yes,yes,S02 shell
 Personalised home feed of new listings,browse,must,yes,partial,newest-first feed + category chips; no personalisation
 Browse by category tree,browse,must,yes,partial,top-level category chips only
-Keyword search,search,must,yes,no,
-Filters: category size brand condition colour price,search,must,yes,no,
-Sort (relevance / newest / price),search,should,yes,no,
-Saved searches with new-listing alerts,search,should,yes,no,
+Keyword search,search,must,yes,partial,"accent-insensitive, title/description/brand/era; real full-text in /replica-backend"
+Filters: category size brand condition colour price,search,must,yes,partial,"category, size, condition, vintage, price; brand and colour not yet"
+Sort (relevance / newest / price),search,should,yes,yes,S05
+Saved searches with new-listing alerts,search,should,yes,partial,"save, list, toggle alerts; alert push needs the backend job"
 Item page: photo gallery title price+fee description attributes,item,must,yes,yes,S06
 Item page: seller card with rating and reviews count,item,must,yes,yes,S06; profile page is a stub
-Favourite an item (heart) + favourites list,item,must,yes,no,
-Seller gets notified when an item is favourited,notifications,could,guess,no,
-Similar items on item page,item,should,yes,no,
+Favourite an item (heart) + favourites list,item,must,yes,yes,"S09, heart on cards and item page"
+Seller gets notified when an item is favourited,notifications,could,guess,partial,in-app notification; push in /replica-backend
+Similar items on item page,item,should,yes,no,not yet
 List an item: up to 20 photos ordered,sell,must,yes,partial,pick + remove + cover; no drag reorder yet
 List an item: title description category brand size condition colour up to 3 materials,sell,must,yes,partial,colour and materials not yet
 List an item: price with similar-sold price hint,sell,should,yes,no,needs your own sold-price data; empty at launch
 List an item: parcel size,sell,must,yes,yes,S11
-Edit / hide / delete / mark sold a listing,sell,must,yes,no,
-Seller wardrobe (profile listings grid),profile,must,yes,no,
-Follow a member,profile,could,yes,no,
-Message the seller about an item,messaging,must,yes,no,realtime chat
-Make an offer (max 40% below price) from item or chat,offers,must,yes,no,
-Seller accept / decline / counter offer,offers,must,yes,no,offer not binding until buyer pays
-Bundle: buy several items from one seller in one order,bundles,should,yes,no,
-Seller-set bundle discount tiers,bundles,should,yes,no,
+Edit / hide / delete / mark sold a listing,sell,must,yes,partial,"hide, show, delete; editing a listing not yet"
+Seller wardrobe (profile listings grid),profile,must,yes,yes,S07
+Follow a member,profile,could,yes,no,not yet
+Message the seller about an item,messaging,must,yes,partial,S15 chat works on fake data; realtime + push in /replica-backend
+Make an offer (max 40% below price) from item or chat,offers,must,yes,yes,"S16, enforced in data layer and schema"
+Seller accept / decline / counter offer,offers,must,yes,yes,offer card in chat; buy at accepted price
+Bundle: buy several items from one seller in one order,bundles,should,yes,yes,S17 + checkout
+Seller-set bundle discount tiers,bundles,should,yes,yes,"S28 settings, applied at checkout"
 Checkout: address + delivery method + payment,checkout,must,yes,no,
 Courier home delivery; courier collects from the seller,shipping,must,yes,partial,manual courier adapter; no real courier API yet (fake data layer)
 Fee breakdown: item + buyer protection fee + shipping,checkout,must,yes,yes,"S18, S22; placeholder fee and shipping rates"
 Cash on delivery (courier collects the total),payments,must,yes,partial,COD order flow works on the fake data layer; no courier cash remittance
 Hold seller money until the order completes,payments,must,yes,partial,ledger entry pending until completion (fake data layer)
 Courier pickup booked + label/tracking number for the seller,shipping,must,yes,partial,seller marks handed over; tracking number is fake
-Shipping deadline for seller + auto-cancel if not shipped,orders,must,yes,no,
+Shipping deadline for seller + auto-cancel if not shipped,orders,must,yes,partial,deadline shown; auto-cancel job in /replica-backend
 Parcel tracking in the app,shipping,must,yes,no,carrier webhooks
 Buyer 2-day window after delivery: confirm or report problem,orders,must,yes,partial,confirm works; auto-complete job and claim screen not yet
-Claims: not received / damaged / not as described with evidence photos,disputes,must,yes,no,needs a manual admin review tool
+Claims: not received / damaged / not as described with evidence photos,disputes,must,yes,partial,"S24 with photos, order goes to dispute; admin decision in /replica-backend"
 Refund and return flow on accepted claims,disputes,must,yes,no,
-Leave feedback (stars + text) both ways,reviews,must,yes,no,
+Leave feedback (stars + text) both ways,reviews,must,yes,yes,S25 after completion; rating recalculated
 Automatic feedback when nobody leaves one,reviews,should,yes,no,positive if buyer silent; negative if seller never shipped
-Edit / delete feedback you left,reviews,could,yes,no,
-Balance: pending vs available,wallet,must,yes,partial,shown on profile; S26 wallet screen is a stub
-Withdraw to bank (RIB) / D17 / Flouci wallet,wallet,must,yes,no,v1: payout requests paid by admin bank transfer
-Identity check (CIN) before first payout,wallet,must,yes,no,v1: photo of CIN reviewed by admin
+Edit / delete feedback you left,reviews,could,yes,no,not yet
+Balance: pending vs available,wallet,must,yes,yes,S26 with history
+Withdraw to bank (RIB) / D17 / Flouci wallet,wallet,must,yes,partial,payout account + withdrawal request; admin pays it in /replica-backend
+Identity check (CIN) before first payout,wallet,must,yes,partial,S27 upload + pending; admin review in /replica-backend
 Orders list (bought / sold) with statuses,orders,must,yes,yes,S21
-Push + in-app notifications,notifications,must,yes,no,messages offers order updates
-Report a listing or member,safety,must,yes,no,needed for store review and DSA
-Block a member,safety,should,yes,no,
+Push + in-app notifications,notifications,must,yes,partial,in-app list + unread badge; push in /replica-backend
+Report a listing or member,safety,must,yes,yes,S32
+Block a member,safety,should,yes,yes,member page; chat closed when blocked
 Admin moderation console (listings / users / claims),admin,must,no,no,not visible to users but required to run it
 Bump a listing (paid boost 3 or 7 days),promotion,could,yes,no,monetisation option
 Wardrobe spotlight / promoted closets,promotion,could,yes,no,
-Holiday mode (pause wardrobe),profile,could,guess,no,not confirmed in sources
-Account deletion in app,account,must,yes,no,Apple requirement
+Holiday mode (pause wardrobe),profile,could,guess,yes,S28; hides items from feed and search
+Account deletion in app,account,must,yes,yes,"S28; listings removed, profile anonymised, orders kept"
 Tunisian compliance: local company + INPDP data protection + terms,compliance,must,yes,no,2000 e-commerce law requires a Tunisian company; INPDP declaration for personal data
 Pro sellers programme (business accounts / 14-day window),pro,could,yes,skip,out of slice: niche C2C first
 Vinted Go lockers and its own carrier network,shipping,could,yes,skip,their logistics network and carrier contracts; use a multi-carrier API
@@ -59,12 +59,12 @@ Negotiated carrier shipping rates,shipping,could,yes,skip,partner deals; you neg
 Electronics authenticity / item verification service,trust,could,yes,skip,operational service with partners; out of slice
 Community forum,community,could,yes,skip,out of slice
 Sign up with phone number + SMS code,onboarding,must,guess,partial,demo: any 4-digit code; real SMS in /replica-backend
-French and English interface (Arabic later; layout ready for right-to-left),onboarding,must,yes,partial,FR + EN on built screens; stub titles FR only; RTL not tested yet
+French and English interface (Arabic later; layout ready for right-to-left),onboarding,must,yes,partial,FR + EN on every built screen; RTL not tested yet
 Prices in TND (millimes),checkout,must,no,yes,integer millimes everywhere
 Vintage flag + era / decade on listings,sell,must,no,yes,"S11 toggle + era, badge on cards and S06"
 Categories beyond clothes (decor / books / vinyl / objects),browse,should,yes,no,second-hand and vintage articles in general
 Online payment via Konnect or Flouci (card / e-DINAR / wallet),payments,should,no,no,BCT-authorised Tunisian gateways; amounts in millimes
 Hand delivery: meet in person and confirm in app,shipping,should,no,partial,selectable at checkout; no in-person confirmation code yet
 COD remittance reconciliation for admins,admin,must,no,no,match courier cash transfers to orders before releasing seller money
-Buyer refuses parcel at the door: return to seller,orders,must,no,no,COD-specific state
+Buyer refuses parcel at the door: return to seller,orders,must,no,no,needs the courier integration
 Pickup-point delivery,shipping,could,yes,no,only if a Tunisian courier offers relay points

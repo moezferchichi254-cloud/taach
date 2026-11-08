@@ -2,11 +2,11 @@ import { router } from 'expo-router';
 import { Bookmark, Search } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Chip } from '../../components/Bits';
 import { Empty } from '../../components/Empty';
-import { ItemCard } from '../../components/ItemCard';
+import { ItemGrid } from '../../components/ItemGrid';
 import { Text } from '../../components/Text';
 import { selectCategories, selectFeed, useStore } from '../../data/fake';
 import { useTheme } from '../../theme';
@@ -21,8 +21,6 @@ export default function Feed() {
   const [cat, setCat] = useState<string | null>(null);
   const shown = cat ? items.filter((i) => i.categoryId === cat) : items;
   const pad = t.layout['screen-padding'];
-  const { width } = useWindowDimensions();
-  const cardW = (width - pad * 2 - t.layout['grid-gap']) / 2;
 
   return (
     <View style={{ flex: 1, backgroundColor: t.c.bg, paddingTop: insets.top }}>
@@ -39,12 +37,8 @@ export default function Feed() {
           <Bookmark size={24} color={t.c.text} />
         </Pressable>
       </View>
-      <FlatList
-        data={shown}
-        keyExtractor={(i) => i.id}
-        numColumns={2}
-        columnWrapperStyle={{ gap: t.layout['grid-gap'], paddingHorizontal: pad }}
-        contentContainerStyle={{ gap: t.space[5], paddingBottom: t.space[6] }}
+      <ItemGrid
+        items={shown}
         ListHeaderComponent={
           <View style={{ gap: t.space[4] }}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: t.space[2], paddingHorizontal: pad }}>
@@ -57,7 +51,6 @@ export default function Feed() {
           </View>
         }
         ListEmptyComponent={<Empty title={tr('feed.empty')} body={tr('feed.emptyBody')} action={tr('tabs.sell')} onAction={() => router.push('/sell')} />}
-        renderItem={({ item }) => <View style={{ width: cardW }}><ItemCard item={item} /></View>}
       />
     </View>
   );

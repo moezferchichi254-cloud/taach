@@ -3,7 +3,8 @@ import { router } from 'expo-router';
 import { Camera, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, Switch, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
+import { Toggle } from '../../components/Toggle';
 import { Badge } from '../../components/Bits';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
@@ -98,7 +99,7 @@ export default function Sell() {
       <Section flush>
         <View style={{ flexDirection: 'row', alignItems: 'center', minHeight: t.layout['row-height'], paddingHorizontal: t.layout['screen-padding'], borderBottomWidth: 1, borderBottomColor: t.c.border }}>
           <Text style={{ flex: 1 }}>{tr('sell.vintage')}</Text>
-          <Switch value={d.isVintage} onValueChange={(v) => setDraft({ isVintage: v })} trackColor={{ true: t.c.accent, false: t.c['surface-2'] }} accessibilityLabel={tr('sell.vintage')} />
+          <Toggle value={d.isVintage} onChange={(v) => setDraft({ isVintage: v })} label={tr('sell.vintage')} />
         </View>
         {d.isVintage ? <NavRow label={tr('sell.era')} value={d.era} onPress={() => router.push('/pick/era')} last /> : null}
       </Section>

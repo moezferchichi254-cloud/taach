@@ -10,7 +10,7 @@ import { InfoRow, Section } from '../../components/Grouped';
 import { Photo } from '../../components/Photo';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
-import { ApiError, checkout, quote, selectItem, selectMyAddress, useStore } from '../../data/fake';
+import { ApiError, checkout, quote, selectItems, selectMyAddress, useStore } from '../../data/fake';
 import type { DeliveryMethod, Quote } from '../../data/types';
 import { formatTND } from '../../lib/money';
 import { useTheme } from '../../theme';
@@ -19,8 +19,11 @@ import { useTheme } from '../../theme';
 export default function Checkout() {
   const t = useTheme();
   const { t: tr, i18n } = useTranslation();
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const item = useStore(selectItem(id), id);
+  const p = useLocalSearchParams<{ id: string; items?: string; offer?: string }>();
+  const ids = p.items ? p.items.split(',') : [p.id];
+  const offerId = p.offer ?? null;
+  const items = useStore(selectItems(ids), ids.join(','));
+  const item = items[0];
   const address = useStore(selectMyAddress);
   const [delivery, setDelivery] = useState<DeliveryMethod>('courier');
   const [q, setQ] = useState<Quote | null>(null);
@@ -31,14 +34,15 @@ export default function Checkout() {
 
   useEffect(() => {
     setQ(null);
-    quote([id], delivery).then(setQ).catch(() => setError(tr('checkout.unavailable')));
-  }, [id, delivery, tr]);
+    quote(ids, delivery, offerId).then(setQ).catch(() => setError(tr('checkout.unavailable')));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ids.join(','), delivery, offerId, tr]);
 
   async function place() {
     setBusy(true);
     setError(null);
     try {
-      const order = await checkout({ itemIds: [id], delivery, payment: 'cod', addressId: address?.id ?? null });
+      const order = await checkout({ itemIds: ids, delivery, payment: 'cod', addressId: address?.id ?? null, offerId });
       router.replace(`/orders/${order.id}`);
     } catch (e) {
       setError(e instanceof ApiError && e.message === 'items_unavailable' ? tr('checkout.unavailable') : tr('common.error'));
@@ -58,8 +62,10 @@ export default function Checkout() {
       <Section>
         {item ? (
           <View style={{ alignItems: 'center', gap: t.space[2], paddingVertical: t.space[2] }}>
-            <Photo photo={item.photos[0]} label={item.title} style={{ width: 96, height: 120, borderRadius: t.radius.sm }} />
-            <Text variant="sm" numberOfLines={1}>{item.title}</Text>
+            <View style={{ flexDirection: 'row', gap: t.space[2] }}>
+              {items.slice(0, 4).map((i) => <Photo key={i.id} photo={i.photos[0]} label={i.title} style={{ width: items.length > 1 ? 64 : 96, height: items.length > 1 ? 80 : 120, borderRadius: t.radius.sm }} />)}
+            </View>
+            <Text variant="sm" numberOfLines={1}>{items.length > 1 ? tr('bundle.selected', { count: items.length }) : item.title}</Text>
           </View>
         ) : null}
         <Divider />
@@ -67,6 +73,7 @@ export default function Checkout() {
           {q ? (
             <>
               <InfoRow label={tr('checkout.items')} value={money(q.itemsMillimes)} />
+              {q.bundleDiscountMillimes ? <InfoRow label={tr('bundle.discount')} value={`-${money(q.bundleDiscountMillimes)}`} /> : null}
               <InfoRow label={tr('checkout.fee')} value={money(q.buyerFeeMillimes)} />
               <InfoRow label={tr('checkout.shipping')} value={money(q.shippingMillimes)} />
               <View style={{ height: t.space[1] }} />

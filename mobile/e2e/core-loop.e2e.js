@@ -55,8 +55,10 @@ const out = process.argv[2], base = 'http://localhost:8099';
   // seller balance
   await tab('Profil');
   await p.getByRole('button', { name: 'Amira' }).click(); await p.waitForTimeout(600);
-  const pending = await p.getByText(/^En attente/).locator('..').locator('..').innerText();
-  console.log('SELLER WALLET:', pending.replace(/\n/g, ' | '));
+  await p.getByRole('button', { name: /Mon solde/ }).click(); await p.waitForTimeout(700);
+  const body = (await p.innerText('body')).replace(/\s+/g, ' ');
+  if (!/Disponible 0,000 DT En attente 85,000 DT/.test(body)) throw new Error('seller balance wrong: ' + body.slice(0, 200));
+  console.log('SELLER WALLET OK: 85,000 DT pending');
   await shot('S26-seller-balance');
 
   // sell form validation

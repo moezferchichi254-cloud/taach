@@ -1,5 +1,6 @@
-import { Stub } from '../components/Stub';
+import { Redirect } from 'expo-router';
 
-export default function Screen() {
-  return <Stub id="S29" title="Notifications" />;
+// S29 lives in the Inbox tab.
+export default function Notifications() {
+  return <Redirect href="/inbox" />;
 }

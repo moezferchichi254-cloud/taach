@@ -1,16 +1,20 @@
-import { router, useLocalSearchParams } from 'expo-router';
-import { Heart, ShieldCheck } from 'lucide-react-native';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { EyeOff, Flag, ShieldCheck, Trash2 } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, useWindowDimensions, View } from 'react-native';
+import { Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { Avatar, Badge, Divider, Note, Stars } from '../../components/Bits';
 import { Button } from '../../components/Button';
+import { confirm } from '../../components/Confirm';
 import { Empty } from '../../components/Empty';
-import { InfoRow } from '../../components/Grouped';
+import { InfoRow, NavRow } from '../../components/Grouped';
+import { FavouriteButton } from '../../components/ItemCard';
 import { Photo } from '../../components/Photo';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
-import { selectCategories, selectItem, selectMe, selectProfile, useStore } from '../../data/fake';
+import {
+  deleteItem, selectBundleDiscounts, selectCategories, selectItem, selectMe, selectProfile, setItemHidden, startConversation, useStore,
+} from '../../data/fake';
 import { formatTND } from '../../lib/money';
 import { buyerFee } from '../../lib/pricing';
 import { useTheme } from '../../theme';
@@ -22,23 +26,32 @@ export default function ItemScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const item = useStore(selectItem(id), id);
   const seller = useStore(selectProfile(item?.sellerId ?? ''), item?.sellerId ?? '');
+  const tiers = useStore(selectBundleDiscounts(item?.sellerId ?? ''), item?.sellerId ?? '');
   const me = useStore(selectMe);
   const cats = useStore(selectCategories);
   const { width } = useWindowDimensions();
   const [page, setPage] = useState(0);
+  const [busy, setBusy] = useState(false);
   const pad = t.layout['screen-padding'];
 
-  if (!item) return <Screen><Empty title={tr('item.notFound')} action={tr('common.close')} onAction={() => router.back()} /></Screen>;
+  if (!item || item.status === 'removed') return <Screen><Empty title={tr('item.notFound')} action={tr('common.close')} onAction={() => router.back()} /></Screen>;
   const mine = item.sellerId === me?.id;
   const cat = cats.find((c) => c.id === item.categoryId);
   const lang = i18n.language;
   const total = item.priceMillimes + buyerFee(item.priceMillimes);
+  const bestTier = tiers.at(-1);
 
-  const footer = mine ? (
-    <Text color="text-muted" center>{tr('item.yourItem')}</Text>
-  ) : item.status === 'active' ? (
+  async function message() {
+    setBusy(true);
+    try { const c = await startConversation(item!.id); router.push(`/conversation/${c.id}`); } finally { setBusy(false); }
+  }
+  async function remove() {
+    if (await confirm(tr('itemMenu.deleteConfirm'), tr('itemMenu.delete'), tr('common.cancel'))) { await deleteItem(item!.id); router.back(); }
+  }
+
+  const footer = mine ? null : item.status === 'active' ? (
     <View style={{ flexDirection: 'row', gap: t.space[3] }}>
-      <Button label={tr('item.offer')} variant="secondary" size="lg" style={{ flex: 1 }} onPress={() => router.push(`/offer/${item.id}`)} />
+      <Button label={tr('item.offer')} variant="secondary" size="lg" style={{ flex: 1 }} onPress={() => router.push(`/offer/${item.id}`)} testID="make-offer" />
       <Button label={tr('item.buy')} size="lg" style={{ flex: 1 }} onPress={() => router.push(`/checkout/${item.id}`)} testID="buy" />
     </View>
   ) : (
@@ -47,6 +60,7 @@ export default function ItemScreen() {
 
   return (
     <Screen footer={footer}>
+      <Stack.Screen options={{ headerTransparent: true, title: '' }} />
       <View>
         <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} onMomentumScrollEnd={(e) => setPage(Math.round(e.nativeEvent.contentOffset.x / width))}>
           {item.photos.map((p, i) => (
@@ -58,20 +72,21 @@ export default function ItemScreen() {
             {item.photos.map((_, i) => <View key={i} style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: t.c['photo-chip'], opacity: i === page ? 1 : 0.5 }} />)}
           </View>
         ) : null}
-        <View style={{ position: 'absolute', bottom: t.space[3], end: t.space[3], flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: t.c['photo-chip'], borderRadius: t.radius.pill, paddingHorizontal: t.space[2], height: 30 }}>
-          <Heart size={16} color={t.c['on-photo-chip']} />
-          <Text variant="sm" style={{ color: t.c['on-photo-chip'] }}>{item.favouriteCount}</Text>
+        <View style={{ position: 'absolute', bottom: t.space[3], end: t.space[3] }}>
+          <FavouriteButton item={item} size="md" />
         </View>
       </View>
 
       {seller ? (
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.space[3], padding: pad }}>
-          <Avatar name={seller.displayName} />
-          <View style={{ flex: 1, gap: 2 }}>
-            <Text variant="sm" weight="600">{seller.username}</Text>
-            <Stars value={seller.ratingAvg} count={seller.ratingCount} />
-          </View>
-          {!mine ? <Button label={tr('item.message')} variant="secondary" size="sm" onPress={() => router.push(`/conversation/${item.id}`)} /> : null}
+          <Pressable accessibilityRole="link" accessibilityLabel={`${seller.username}, ${seller.ratingAvg.toFixed(1)} / 5`} onPress={() => router.push(`/member/${seller.id}`)} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: t.space[3] }}>
+            <Avatar name={seller.displayName} />
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text variant="sm" weight="600">{seller.username}</Text>
+              <Stars value={seller.ratingAvg} count={seller.ratingCount} />
+            </View>
+          </Pressable>
+          {!mine ? <Button label={tr('item.message')} variant="secondary" size="sm" onPress={message} loading={busy} testID="message-seller" /> : null}
         </View>
       ) : null}
       <Divider />
@@ -79,6 +94,7 @@ export default function ItemScreen() {
       <View style={{ padding: pad, gap: t.space[1] }}>
         <View style={{ flexDirection: 'row', gap: t.space[2], marginBottom: t.space[1] }}>
           {item.isVintage ? <Badge label={item.era ? `${tr('item.vintage')} · ${item.era}` : tr('item.vintage')} tone="vintage" /> : null}
+          {item.status === 'hidden' ? <Badge label={tr('member.hidden')} /> : null}
         </View>
         <Text variant="lg">{item.title}</Text>
         <Text variant="sm" color="text-muted">{[item.size, tr(`item.condition.${item.condition}`), item.brand ?? tr('item.noBrand')].filter(Boolean).join(' · ')}</Text>
@@ -94,7 +110,7 @@ export default function ItemScreen() {
         <Note title={tr('item.protectionTitle')} body={tr('item.protectionBody')} />
       </View>
 
-      {item.description ? <Text style={{ padding: pad }}>{item.description}</Text> : null}
+      {item.description ? <Text style={{ padding: pad }}>{item.description}</Text> : <View style={{ height: pad }} />}
       <View style={{ paddingHorizontal: pad }}>
         <Text variant="sm" weight="600" style={{ marginBottom: t.space[1] }}>{tr('item.details')}</Text>
         {cat ? <InfoRow label={tr('item.category')} value={lang === 'en' ? cat.nameEn : cat.nameFr} /> : null}
@@ -102,6 +118,22 @@ export default function ItemScreen() {
         {item.size ? <InfoRow label={tr('item.size')} value={item.size} /> : null}
         {item.era ? <InfoRow label={tr('item.era')} value={item.era} /> : null}
         <InfoRow label={tr('item.uploaded')} value={new Date(item.createdAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'fr-FR')} />
+      </View>
+
+      {!mine && item.status === 'active' && bestTier ? (
+        <View style={{ marginTop: t.space[4], borderTopWidth: 1, borderTopColor: t.c.border }}>
+          <NavRow label={`${tr('member.bundle')} · ${tr('member.bundleDeal', { percent: bestTier.percent })}`} onPress={() => router.push(`/bundle/${item.sellerId}?first=${item.id}`)} last />
+        </View>
+      ) : null}
+
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: t.space[2], padding: pad, marginTop: t.space[2] }}>
+        {mine && (item.status === 'active' || item.status === 'hidden') ? (
+          <>
+            <Button label={item.status === 'hidden' ? tr('itemMenu.show') : tr('itemMenu.hide')} variant="secondary" size="sm" icon={<EyeOff size={16} color={t.c.accent} />} onPress={() => setItemHidden(item.id, item.status !== 'hidden')} />
+            <Button label={tr('itemMenu.delete')} variant="ghost" size="sm" icon={<Trash2 size={16} color={t.c.danger} />} onPress={remove} />
+          </>
+        ) : null}
+        {!mine ? <Button label={tr('itemMenu.report')} variant="ghost" size="sm" icon={<Flag size={16} color={t.c['text-muted']} />} onPress={() => router.push(`/report?type=item&id=${item.id}`)} /> : null}
       </View>
     </Screen>
   );

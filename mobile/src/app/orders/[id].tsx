@@ -10,7 +10,8 @@ import { Photo } from '../../components/Photo';
 import { Screen } from '../../components/Screen';
 import { Text } from '../../components/Text';
 import { Timeline } from '../../components/Timeline';
-import { confirmReceived, devMarkDelivered, markShipped, selectItem, selectMe, selectOrder, selectProfile, useStore } from '../../data/fake';
+import { confirm } from '../../components/Confirm';
+import { cancelOrder, confirmReceived, devMarkDelivered, markShipped, selectClaim, selectItem, selectMe, selectMyFeedbackOn, selectOrder, selectProfile, useStore } from '../../data/fake';
 import { formatTND } from '../../lib/money';
 import { useTheme } from '../../theme';
 
@@ -24,6 +25,8 @@ export default function OrderScreen() {
   const item = useStore(selectItem(order?.itemIds[0] ?? ''), order?.itemIds[0] ?? '');
   const otherId = order ? (order.buyerId === me?.id ? order.sellerId : order.buyerId) : '';
   const other = useStore(selectProfile(otherId), otherId);
+  const claim = useStore(selectClaim(id), id);
+  const myReview = useStore(selectMyFeedbackOn(id), id);
   const [busy, setBusy] = useState(false);
   const lang = i18n.language;
   const money = (m: number) => formatTND(m, lang, { exact: true });
@@ -33,9 +36,28 @@ export default function OrderScreen() {
   const isBuyer = order.buyerId === me?.id;
   const run = (fn: () => Promise<unknown>) => async () => { setBusy(true); try { await fn(); } finally { setBusy(false); } };
 
+  async function cancel() {
+    if (await confirm(tr('ordersExtra.cancelConfirm'), tr('ordersExtra.cancel'), tr('common.close'))) await run(() => cancelOrder(order!.id, isBuyer ? 'buyer' : 'seller'))();
+  }
+
   let footer: React.ReactNode = null;
-  if (!isBuyer && order.status === 'confirmed') {
-    footer = <Button full size="lg" label={tr('orders.shipIt')} onPress={run(() => markShipped(order.id))} loading={busy} testID="ship" />;
+  if (order.status === 'confirmed') {
+    footer = (
+      <>
+        {!isBuyer ? <Button full size="lg" label={tr('orders.shipIt')} onPress={run(() => markShipped(order.id))} loading={busy} testID="ship" /> : null}
+        <Button full variant="ghost" label={tr('ordersExtra.cancel')} onPress={cancel} testID="cancel-order" />
+      </>
+    );
+  } else if (order.status === 'completed' && !myReview) {
+    footer = <Button full size="lg" label={tr('feedback.leave')} onPress={() => router.push(`/feedback/${order.id}`)} testID="leave-review" />;
+  } else if (isBuyer && order.status === 'shipped') {
+    footer = (
+      <>
+        <Button full variant="secondary" label={tr('orders.devDelivered')} onPress={run(() => devMarkDelivered(order.id))} loading={busy} testID="dev-delivered" />
+        <Text variant="xs" color="text-muted" center>{tr('orders.devNote')}</Text>
+        <Button full variant="ghost" label={tr('claim.reasons.not_received')} onPress={() => router.push(`/claim/${order.id}`)} />
+      </>
+    );
   } else if (order.status === 'shipped') {
     footer = (
       <>
@@ -52,7 +74,7 @@ export default function OrderScreen() {
     );
   }
 
-  const tone = order.status === 'completed' ? 'success' : order.status === 'delivered' || order.status === 'confirmed' ? 'warning' : 'neutral';
+  const tone = order.status === 'disputed' || order.status === 'cancelled' ? 'danger' : order.status === 'completed' ? 'success' : order.status === 'delivered' || order.status === 'confirmed' ? 'warning' : 'neutral';
   return (
     <Screen grouped footer={footer}>
       <Stack.Screen options={{ title: `#${order.number}` }} />
@@ -71,6 +93,9 @@ export default function OrderScreen() {
         {order.status === 'confirmed' && !isBuyer ? <Note body={tr('orders.shipBy', { date: date(order.shipBy) })} tone="warning-bg" /> : null}
         {order.status === 'delivered' && isBuyer ? <Note body={tr('orders.confirmWindow', { date: date(order.completesAt) })} tone="warning-bg" /> : null}
         {order.status === 'completed' ? <Note body={tr('orders.completedNote')} tone="success-bg" /> : null}
+        {order.status === 'disputed' && claim ? <Note title={tr('claim.open', { reason: tr(`claim.reasons.${claim.reason}`) })} body={tr('ordersExtra.disputed')} tone="danger-bg" /> : null}
+        {order.status === 'cancelled' ? <Note body={tr('ordersExtra.cancelled')} /> : null}
+        {myReview ? <Text variant="sm" color="text-muted" style={{ marginTop: t.space[2] }}>{tr('feedback.done', { stars: myReview.stars })}</Text> : null}
         {order.trackingNumber ? <View style={{ marginTop: t.space[3] }}><InfoRow label={tr('orders.tracking')} value={order.trackingNumber} /></View> : null}
         {other ? <InfoRow label={isBuyer ? tr('orders.seller') : tr('orders.buyer')} value={other.username} /> : null}
         <InfoRow label={tr('checkout.payment')} value={tr('checkout.cod')} />
@@ -78,6 +103,7 @@ export default function OrderScreen() {
 
       <Section>
         <InfoRow label={tr('checkout.items')} value={money(order.itemsMillimes)} />
+        {order.bundleDiscountMillimes ? <InfoRow label={tr('bundle.discount')} value={`-${money(order.bundleDiscountMillimes)}`} /> : null}
         <InfoRow label={tr('checkout.fee')} value={money(order.buyerFeeMillimes)} />
         <InfoRow label={tr('checkout.shipping')} value={money(order.shippingMillimes)} />
         <InfoRow strong label={tr('checkout.total')} value={money(order.totalMillimes)} />

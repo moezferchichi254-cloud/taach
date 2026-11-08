@@ -3,8 +3,9 @@
 App: `mobile/` (Expo SDK 58, Expo Router, TypeScript). Data: in-memory fake
 data layer (`mobile/src/data/fake.ts`) with the same functions as the planned
 Supabase API, so `/replica-backend` swaps it without touching screens.
-Tested in a browser (web export + Playwright): `mobile/e2e/core-loop.e2e.js`,
-light and dark, 0 console errors. Screenshots in `replica/clone-screens/`.
+Tested in a browser (web export + Playwright): `mobile/e2e/core-loop.e2e.js`
+and `mobile/e2e/screens.e2e.js` (28 checks across every screen), light and
+dark, 0 console errors. Screenshots in `replica/clone-screens/`.
 
 | ID | date | status | missing | notes |
 | --- | --- | --- | --- | --- |
@@ -19,7 +20,23 @@ light and dark, 0 console errors. Screenshots in `replica/clone-screens/`.
 | S21 orders | 2026-11-06 | done | | bought / sold |
 | S22/S23 order | 2026-11-06 | partial | claims (S24), feedback (S25), timers | ship → (demo) delivered → confirm → completed, seller credited as pending |
 | S07 profile (own) | 2026-11-06 | partial | public profile, wardrobe grid, reviews | balance, language switch, demo account switch |
-| S03 S08 S09 S14-S17 S19 S20 S24-S32 | 2026-11-06 | stub | everything | placeholder screens |
+| S03/S04 search | 2026-11-08 | partial | brand and colour filters, search suggestions | accent-insensitive search, quick chips, result count, save search |
+| S05 filters | 2026-11-08 | done | | sort, category, vintage, condition, size, price range, live count |
+| S30 saved searches | 2026-11-08 | partial | push alerts (backend job) | list, toggle alerts, delete, reopen |
+| S09 favourites | 2026-11-08 | done | | heart on cards and item page, seller notified |
+| S14 inbox + S29 notifications | 2026-11-08 | partial | push | unread badge on the tab, pending-offer badge, notifications tab |
+| S15 conversation | 2026-11-08 | partial | realtime, images in chat | offer cards, system messages, off-app contact flagged, blocked state |
+| S16 offer | 2026-11-08 | done | | 40% floor, suggestions, counter-offers, buy at accepted price |
+| S17 bundle | 2026-11-08 | done | | multi-select, discount tiers, bundle checkout, bundle offers |
+| S07/S08 member + reviews | 2026-11-08 | partial | follow | wardrobe, reviews incl. automatic, bundle deal, block, report, holiday notice |
+| S24 claim | 2026-11-08 | partial | seller response, admin decision, returns | reasons, text, photos; order goes to dispute; money stays on hold |
+| S25 feedback | 2026-11-08 | partial | edit / delete own review | stars + comment after completion, rating recalculated |
+| S26 wallet | 2026-11-08 | partial | admin payout processing | pending / available, history, withdraw (needs ID + account) |
+| S27 ID check | 2026-11-08 | partial | admin review | CIN front + back upload, pending state |
+| S28 settings | 2026-11-08 | done | | profile, address with 24 governorates, payout account (RIB / D17 / Flouci), bundle tiers, holiday mode, language, account deletion |
+| S32 report | 2026-11-08 | done | | item and member |
+| S31 bump | 2026-11-08 | stub | everything | could-have; paid boosts likely need Apple / Google in-app purchase |
+
 
 Harder than expected:
 - `useSyncExternalStore` needs stable snapshots: the store caches each read,
@@ -34,3 +51,10 @@ Harder than expected:
 
 Placeholders to replace before launch: buyer fee (5% + 0.500 TND) and
 shipping prices (7 / 8 / 10 TND) in `mobile/src/lib/pricing.ts`.
+
+Found by the screens test (2026-11-08) and fixed:
+- the heart overlay on item cards blocked taps on the whole photo (web);
+- the Message button sat inside the seller link;
+- opening a conversation looped forever (mark-as-read changed the
+  conversation, which marked it read again);
+- web switches were the platform green: new `Toggle` uses the palette.
